@@ -129,6 +129,18 @@ describe('registry-state', function() {
         return state.debugOutputToDir(fileLogger, 'my-registry');
     });
 
+    it('extract-snapshot-info', function() {
+        const state = loadRegistryState('snapshot-items-small.json');
+
+        const fileLoggerOptions = new LoggerOptions().enableFile(true).cleanOnStart(true).pretty(true);
+        const fileLogger = setupLogger('FILE', fileLoggerOptions);
+
+        const snapshotInfo = state.extractSnapshotInfo();
+        const contents = JSON.stringify(snapshotInfo, null, 4);
+        return fileLogger.outputFile("registry-small-snapshot.json", contents);
+    });
+
+
 });
 
 function loadRegistryState(filePath: string) : RegistryState

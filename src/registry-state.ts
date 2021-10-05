@@ -175,6 +175,48 @@ export class RegistryState
         }
     }
 
+    extractSnapshotInfo() : SnapshotInfo
+    {
+        const snapshotInfo : SnapshotInfo = {
+            date: this.date,
+            items: []
+        };
+
+        for(const node of this.getNodes())
+        {
+            snapshotInfo.items.push({
+                dn: node.dn,
+                kind: node.kind,
+                config_kind: SnapshotConfigKind.node,
+                config: node.config
+            });
+
+            const props = this.getProperties(node.dn);
+            for(const prop of _.values(props))
+            {
+                snapshotInfo.items.push({
+                    dn: node.dn,
+                    kind: node.kind,
+                    config_kind: SnapshotConfigKind.props,
+                    config: prop
+                });
+            }
+
+            const alerts = this.getAlerts(node.dn);
+            if (alerts.length > 0)
+            {
+                snapshotInfo.items.push({
+                    dn: node.dn,
+                    kind: node.kind,
+                    config_kind: SnapshotConfigKind.alerts,
+                    config: alerts
+                });
+            }
+        }
+
+        return snapshotInfo;
+    }
+
     private _transform(snapshotInfo: SnapshotInfo)
     {
         for(const item of snapshotInfo.items)
