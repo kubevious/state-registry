@@ -1,11 +1,12 @@
 import _ from 'the-lodash';
-import { parentDn } from '@kubevious/entity-meta';
 import { ILogger } from 'the-logger';
 
-import { RegistryStateNode } from './registry-state-node';
-import { RegistryBundleState } from './registry-bundle-state';
+import { parentDn } from '@kubevious/entity-meta';
+import { NodeKind } from '@kubevious/entity-meta';
+import { EnumDictionary } from '@kubevious/entity-meta/dist/types';
 
-import { Alert } from './types/alert';
+import { RegistryStateNode } from './registry-state-node';
+import { RegistryBundleState } from './registry-bundle-state';import { Alert } from './types/alert';
 import { SnapshotAlertsConfig, SnapshotConfigKind, SnapshotNodeConfig, SnapshotPropsConfig  } from './types/configs';
 import { SnapshotInfo, SnapshotItemInfo } from './types/snapshot';
 
@@ -19,7 +20,7 @@ export class RegistryState
     private _childrenMap : Record<string, string[]> = {};
     private _propertiesMap : Record<string, ItemProperties> = {};
     private _alertsMap : Record<string, Alert[]> = {};
-    private _kindMap : Record<string, Record<string, RegistryStateNode>> = {};
+    private _kindMap : EnumDictionary<NodeKind, Record<string, RegistryStateNode>> = {};
 
     private _stateBundle? : RegistryBundleState;
 
@@ -79,7 +80,7 @@ export class RegistryState
         return node;
     }
 
-    findByKind(kind: string) : Record<string, RegistryStateNode>
+    findByKind(kind: NodeKind) : Record<string, RegistryStateNode>
     {
         const res = this._kindMap[kind];
         if (!res) {
@@ -97,12 +98,12 @@ export class RegistryState
         return res;
     }
 
-    countByKind(kind: string) : number
+    countByKind(kind: NodeKind) : number
     {
         return _.keys(this.findByKind(kind)).length;
     }
 
-    childrenByKind(parentDn: string, kind: string) : Record<string, RegistryStateNode>
+    childrenByKind(parentDn: string, kind: NodeKind) : Record<string, RegistryStateNode>
     {
         const newResult : Record<string, RegistryStateNode> = {};
         const childDns = this._childrenMap[parentDn];
@@ -120,18 +121,32 @@ export class RegistryState
         return newResult;
     }
 
-    scopeByKind(descendentDn: string, kind: string) : Record<string, RegistryStateNode>
+    scopeByKind(ancestorDn: string, kind: NodeKind) : Record<string, RegistryStateNode>
     {
         const result = this.findByKind(kind);
         const newResult : Record<string, RegistryStateNode> = {};
         for(const key of _.keys(result))
         {
-            if (_.startsWith(key, descendentDn))
+            if (_.startsWith(key, ancestorDn))
             {
                 newResult[key] = result[key];
             }
         }
         return newResult;
+    }
+
+    countScopeByKind(ancestorDn: string, kind: NodeKind) : number
+    {
+        const result = this.findByKind(kind);
+        let count = 0;
+        for(const key of _.keys(result))
+        {
+            if (_.startsWith(key, ancestorDn))
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     getChildrenDns(dn: string) : string[]
@@ -241,7 +256,7 @@ export class RegistryState
         {
             this._kindMap[nodeConfig.kind] = {};
         }
-        this._kindMap[nodeConfig.kind][dn] = node;
+        this._kindMap[nodeConfig.kind]![dn] = node;
 
         this._registerChild(dn);
     }

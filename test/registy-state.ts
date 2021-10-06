@@ -12,6 +12,8 @@ import { SnapshotInfo } from '../src/types/snapshot';
 
 import * as FileUtils from './utils/file-utils';
 
+import { NodeKind } from '@kubevious/entity-meta';
+
 describe('registry-state', function() {
 
     it('parse-small-test', function() {
@@ -49,7 +51,7 @@ describe('registry-state', function() {
     it('findByKind', function() {
         const state = loadRegistryState('snapshot-items-large.json');
 
-        const result = state.findByKind('launcher');
+        const result = state.findByKind(NodeKind.launcher);
         should(result).be.an.Object();
         should(_.keys(result).length).be.equal(77);
 
@@ -63,7 +65,7 @@ describe('registry-state', function() {
     it('scopeByKind', function() {
         const state = loadRegistryState('snapshot-items-large.json');
 
-        const result = state.scopeByKind('root/ns-[kubevious]', 'launcher');
+        const result = state.scopeByKind('root/ns-[kubevious]', NodeKind.launcher);
         should(result).be.an.Object();
         should(_.keys(result).length).be.equal(4);
 
@@ -74,10 +76,17 @@ describe('registry-state', function() {
         }
     });
 
+    it('countScopeByKind', function() {
+        const state = loadRegistryState('snapshot-items-large.json');
+
+        const result = state.countScopeByKind('root/ns-[kubevious]', NodeKind.launcher);
+        should(result).be.equal(4);
+    });
+
     it('childrenByKind', function() {
         const state = loadRegistryState('snapshot-items-large.json');
 
-        const result = state.childrenByKind('root/ns-[kubevious]/app-[kubevious-ui]', 'service');
+        const result = state.childrenByKind('root/ns-[kubevious]/app-[kubevious-ui]', NodeKind.service);
         (result).should.be.an.Object();
         (_.keys(result).length).should.be.equal(1);
 

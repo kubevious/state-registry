@@ -1,3 +1,5 @@
+import { NodeKind } from '@kubevious/entity-meta';
+
 import { BundledNodeConfig, RegistryBundleState } from "./registry-bundle-state";
 import { RegistryStateNode } from "./registry-state-node";
 
@@ -25,7 +27,7 @@ export class RegistryBundleNode
         this._annotations = node.getPropertiesConfig('annotations');
     }
 
-    get kind() : string {
+    get kind() : NodeKind {
         return this._node.kind;
     }
 

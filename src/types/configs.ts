@@ -1,3 +1,6 @@
+
+import { NodeKind } from '@kubevious/entity-meta';
+
 import { Alert } from "./alert";
 
 export enum SnapshotConfigKind
@@ -10,7 +13,7 @@ export enum SnapshotConfigKind
 
 export interface SnapshotNodeConfig
 {
-    kind: string;
+    kind: NodeKind;
     rn: string;
     name?: string;
 }

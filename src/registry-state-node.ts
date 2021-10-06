@@ -1,4 +1,7 @@
 import _ from 'the-lodash';
+
+import { NodeKind } from '@kubevious/entity-meta';
+
 import { ItemProperties, RegistryState } from './registry-state';
 import { Alert } from './types/alert';
 import { SnapshotNodeConfig, SnapshotPropsConfig  } from './types/configs';
@@ -25,7 +28,7 @@ export class RegistryStateNode
         return this._dn;
     }
 
-    get kind() : string  {
+    get kind() : NodeKind  {
         return this.config.kind;
     }
 
