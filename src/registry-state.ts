@@ -149,6 +149,13 @@ export class RegistryState
         return count;
     }
 
+    scopeFlat(ancestorDn: string) : RegistryStateNode[]
+    {
+        const nodes = this.getNodes();
+        const newResult = nodes.filter(x => _.startsWith(x.dn, ancestorDn));
+        return newResult;
+    }
+
     getChildrenDns(dn: string) : string[]
     {
         const childDns = this._childrenMap[dn];
