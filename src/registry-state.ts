@@ -352,14 +352,14 @@ export class RegistryState
     {
         for(const dn of _.keys(this._nodeMap))
         {
-            const filePath = `${relPath}/${this._sanitizeDnPath(dn)}/node.json`;
+            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/node.json`;
             const node = this._nodeMap[dn];
             await logger.outputFile(filePath, node.config);
         }
 
         for(const dn of _.keys(this._childrenMap))
         {
-            const filePath = `${relPath}/${this._sanitizeDnPath(dn)}/children.json`;
+            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/children.json`;
             const children = this._childrenMap[dn];
             await logger.outputFile(filePath, children);
         }
@@ -371,14 +371,14 @@ export class RegistryState
             for(const propName of _.keys(propsMap))
             {
                 const props = propsMap[propName];
-                const filePath = `${relPath}/${this._sanitizeDnPath(dn)}/props-${props.id}.json`;
+                const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/props-${props.id}.json`;
                 await logger.outputFile(filePath, props);
             }
         }
 
         for(const dn of _.keys(this._alertsMap))
         {
-            const filePath = `${relPath}/${this._sanitizeDnPath(dn)}/alerts.json`;
+            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/alerts.json`;
             const alerts = this._alertsMap[dn];
             if (alerts.length > 0) {
                 await logger.outputFile(filePath, alerts);
@@ -386,7 +386,7 @@ export class RegistryState
         }
     }
 
-    private _sanitizeDnPath(dn: string): string
+    sanitizeDnPath(dn: string): string
     {
         const parts = parseDn(dn);
         const sanitizedParts = parts.map(x => this._sanitizeRn(x.rn));
@@ -397,8 +397,8 @@ export class RegistryState
     {
         const SYMBOLS = [
             /#/g, /%/g, /&/g, /\*/g, /'/g, /"/g, /\\/g
-            , /{/g, /}/g, /\[/g, /]/g, /</g, />'/g, /@/g
-            , /:/g, /\+/g, /|/g, /=/g, /\?/g, /!/g];
+            , /{/g, /}/g, /</g, />'/g, /@/g
+            , /:/g, /\+/g, /\|/g, /=/g, /\?/g, /!/g];
 
         for(const ch of SYMBOLS)
         {
