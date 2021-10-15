@@ -396,7 +396,7 @@ export class RegistryState
     private _sanitizeRn(rn: string) : string
     {
         const SYMBOLS = [
-            /#/g, /%/g, /&/g, /\*/g, /'/g, /"/g, /\\/g
+            /\//g , /\\/g, /#/g, /%/g, /&/g, /\*/g, /'/g, /"/g
             , /{/g, /}/g, /</g, />'/g, /@/g
             , /:/g, /\+/g, /\|/g, /=/g, /\?/g, /!/g];
 

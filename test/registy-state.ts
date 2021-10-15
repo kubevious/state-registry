@@ -159,6 +159,12 @@ describe('registry-state', function() {
             should(sanitized).be.equal('root/logic/ns-[kubevious]');
         }
         
+        {
+            const dn = 'root/logic/ns-[kubevious]/image-[kubevious/ui]';
+            const sanitized = state.sanitizeDnPath(dn);
+            should(sanitized).be.equal('root/logic/ns-[kubevious]/image-[kubevious_ui]');
+        }
+
     });
 
 
