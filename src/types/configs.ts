@@ -1,5 +1,5 @@
 
-import { NodeKind } from '@kubevious/entity-meta';
+import { NodeKind, PropsKind, PropsId } from '@kubevious/entity-meta';
 
 import { Alert } from "./alert";
 
@@ -20,8 +20,8 @@ export interface SnapshotNodeConfig
 
 export interface SnapshotPropsConfig
 {
-    kind: string;
-    id: string;
+    kind: PropsKind;
+    id: PropsId;
     title: string;
     order?: number;
     config: any;

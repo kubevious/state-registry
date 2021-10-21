@@ -3,7 +3,7 @@ import { ILogger } from 'the-logger';
 
 import { parentDn, parseDn } from '@kubevious/entity-meta';
 import { NodeKind } from '@kubevious/entity-meta';
-import { EnumDictionary } from '@kubevious/entity-meta/dist/types';
+import { EnumDictionary } from '@kubevious/entity-meta';
 
 import { RegistryStateNode } from './registry-state-node';
 import { RegistryBundleState } from './registry-bundle-state';import { Alert } from './types/alert';
