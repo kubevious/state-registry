@@ -18,7 +18,7 @@
   "author": "Ruben Hakopian <ruben.hakopian@gmail.com>",
   "license": "Propriatery",
   "dependencies": {
-    "@kubevious/entity-meta": "^1.0.33",
+    "@kubevious/entity-meta": "^1.0.34",
     "the-lodash": "^2.0.9",
     "the-logger": "^2.0.10",
     "the-promise": "^2.0.13"

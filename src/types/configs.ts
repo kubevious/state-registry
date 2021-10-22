@@ -22,8 +22,6 @@ export interface SnapshotPropsConfig
 {
     kind: PropsKind;
     id: PropsId;
-    title: string;
-    order?: number;
     config: any;
 }
 
