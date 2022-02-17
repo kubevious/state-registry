@@ -5,15 +5,27 @@ export interface AlertCounter {
 }
 
 export enum AlertSourceKind {
-    parser = 'parser',
+    validator = 'validator',
     rule = 'rule',
 }
 
-export interface AlertSource
+export interface AlertValidatorSource
+{
+    kind: AlertSourceKind.validator;
+    id: string;
+}
+
+export interface AlertRuleSource
+{
+    kind: AlertSourceKind.rule;
+    id: string;
+}
+
+export type AlertSource = 
 {
     kind?: AlertSourceKind;
-    id?: string;
-}
+} | (AlertValidatorSource | AlertRuleSource);
+
 export interface Alert
 {
     id: string,
@@ -21,4 +33,3 @@ export interface Alert
     msg: string,
     source?: AlertSource
 }
-
