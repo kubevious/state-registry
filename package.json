@@ -18,10 +18,10 @@
   "author": "Ruben Hakopian <ruben.hakopian@gmail.com>",
   "license": "Propriatery",
   "dependencies": {
-    "@kubevious/entity-meta": "^1.0.45",
+    "@kubevious/entity-meta": "^1.0.78",
     "the-lodash": "^2.0.9",
     "the-logger": "^2.0.14",
-    "the-promise": "^2.0.13"
+    "the-promise": "^2.0.15"
   },
   "devDependencies": {
     "@types/mocha": "^8.0.3",

@@ -12,7 +12,7 @@ import { SnapshotInfo } from '../src/types/snapshot';
 
 import * as FileUtils from './utils/file-utils';
 
-import { NodeKind } from '@kubevious/entity-meta';
+import { NodeKind, parseDn } from '@kubevious/entity-meta';
 
 describe('registry-state', function() {
 
@@ -69,10 +69,13 @@ describe('registry-state', function() {
         should(result).be.an.Object();
         should(_.keys(result).length).be.equal(4);
 
-        for(const item of _.values(result))
+        for(const dn of _.values(result))
         {
-            (item).should.be.an.Object();
-            (item.kind).should.be.equal('launcher');
+            (dn).should.be.a.String();
+            const parsedDn = parseDn(dn);
+            const rn = _.last(parsedDn);
+            should(rn).be.ok();
+            should(rn!.kind).be.equal('launcher');
         }
     });
 
@@ -87,12 +90,14 @@ describe('registry-state', function() {
         const state = loadRegistryState('snapshot-items-large.json');
 
         const result = state.childrenByKind('root/ns-[kubevious]/app-[kubevious-ui]', NodeKind.service);
-        (result).should.be.an.Object();
-        (_.keys(result).length).should.be.equal(1);
+        should(result).be.an.Array();
+        should(result.length).be.equal(1);
 
-        const item = result['root/ns-[kubevious]/app-[kubevious-ui]/service-[NodePort]'];
-        (item).should.be.an.Object();
-        (item.rn).should.be.equal('service-[NodePort]');
+        const parsedDn = parseDn(result[0]);
+        const rn = _.last(parsedDn);
+        should(rn).be.ok();
+        should(rn?.kind).be.equal(NodeKind.service);
+        should(rn?.name).be.equal('NodePort');
     });
 
     it('build-bundle', function() {

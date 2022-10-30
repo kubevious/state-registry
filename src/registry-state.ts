@@ -10,9 +10,9 @@ import { RegistryBundleState } from './registry-bundle-state';import { Alert } f
 import { SnapshotAlertsConfig, SnapshotConfigKind, SnapshotNodeConfig, SnapshotPropsConfig  } from './types/configs';
 import { SnapshotInfo, SnapshotItemInfo } from './types/snapshot';
 
-export type ItemProperties = Record<string, SnapshotPropsConfig>;
+import { RegistryAccessor, ItemProperties } from './registry-accessor';
 
-export class RegistryState
+export class RegistryState implements RegistryAccessor
 {
     private _date : Date;
 
@@ -103,9 +103,9 @@ export class RegistryState
         return _.keys(this.findByKind(kind)).length;
     }
 
-    childrenByKind(parentDn: string, kind: NodeKind) : Record<string, RegistryStateNode>
+    childrenByKind(parentDn: string, kind: NodeKind) : string[]
     {
-        const newResult : Record<string, RegistryStateNode> = {};
+        const newResult : Record<string, boolean> = {};
         const childDns = this._childrenMap[parentDn];
         if (childDns) {
             for(const childDn of childDns) {
@@ -113,26 +113,26 @@ export class RegistryState
                 if (childNode) {
                     if (childNode.kind == kind)
                     {
-                        newResult[childDn] = childNode;
+                        newResult[childDn] = true;
                     }
                 }
             }
         }
-        return newResult;
+        return _.keys(newResult);
     }
 
-    scopeByKind(ancestorDn: string, kind: NodeKind) : Record<string, RegistryStateNode>
+    scopeByKind(ancestorDn: string, kind: NodeKind) : string[]
     {
         const result = this.findByKind(kind);
-        const newResult : Record<string, RegistryStateNode> = {};
+        const newResult : Record<string, boolean> = {};
         for(const key of _.keys(result))
         {
             if (_.startsWith(key, ancestorDn))
             {
-                newResult[key] = result[key];
+                newResult[key] = true;
             }
         }
-        return newResult;
+        return _.keys(newResult);
     }
 
     countScopeByKind(ancestorDn: string, kind: NodeKind) : number

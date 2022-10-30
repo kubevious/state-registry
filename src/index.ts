@@ -1,3 +1,6 @@
+
+export { RegistryAccessor, ItemProperties } from './registry-accessor';
+
 export { RegistryState } from './registry-state'
 export { RegistryStateNode } from './registry-state-node'
 

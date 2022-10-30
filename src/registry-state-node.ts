@@ -2,7 +2,8 @@ import _ from 'the-lodash';
 
 import { NodeKind } from '@kubevious/entity-meta';
 
-import { ItemProperties, RegistryState } from './registry-state';
+import { RegistryState } from './registry-state';
+import { ItemProperties } from './registry-accessor';
 import { Alert } from './types/alert';
 import { SnapshotNodeConfig, SnapshotPropsConfig  } from './types/configs';
 
