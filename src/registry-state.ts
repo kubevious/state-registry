@@ -71,13 +71,13 @@ export class RegistryState implements RegistryAccessor
         return _.keys(this._nodeMap);
     }
 
-    getNode(dn: string) : RegistryStateNode | null
+    getNode(dn: string) : SnapshotNodeConfig | null
     {
         const node = this._nodeMap[dn];
         if (!node) {
             return null;
         }
-        return node;
+        return node.config;
     }
 
     findByKind(kind: NodeKind) : Record<string, RegistryStateNode>
