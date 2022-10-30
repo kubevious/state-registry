@@ -1,7 +1,7 @@
 import _ from 'the-lodash';
 import { ILogger } from 'the-logger';
 
-import { parentDn, parseDn } from '@kubevious/entity-meta';
+import { parentDn, parseDn, PropsId } from '@kubevious/entity-meta';
 import { NodeKind } from '@kubevious/entity-meta';
 import { EnumDictionary } from '@kubevious/entity-meta';
 
@@ -49,10 +49,17 @@ export class RegistryState implements RegistryAccessor
         return _.keys(this._nodeMap).length;
     }
 
-    getProperties(dn: string) : ItemProperties
+    getAllProperties(dn: string) : ItemProperties
     {
-        const props = this._getProperties(dn) ?? {};
-        return props;
+        const allProps = this._getProperties(dn) ?? {};
+        return allProps;
+    }
+
+    getProperties(dn: string, id: PropsId) : SnapshotPropsConfig
+    {
+        const allProps = this._getProperties(dn) ?? {};
+        const props = allProps[id] ?? {};
+        return props || {};
     }
 
     getAlerts(dn: string) : Alert[]
@@ -213,7 +220,7 @@ export class RegistryState implements RegistryAccessor
                 config: node.config
             });
 
-            const props = this.getProperties(node.dn);
+            const props = this.getAllProperties(node.dn);
             for(const prop of _.values(props))
             {
                 snapshotInfo.items.push({

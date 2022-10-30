@@ -12,7 +12,7 @@ import { SnapshotInfo } from '../src/types/snapshot';
 
 import * as FileUtils from './utils/file-utils';
 
-import { NodeKind, parseDn } from '@kubevious/entity-meta';
+import { NodeKind, parseDn, PropsId, PropsKind } from '@kubevious/entity-meta';
 
 describe('registry-state', function() {
 
@@ -37,9 +37,18 @@ describe('registry-state', function() {
         const deploymentNode = bundle.getNodeItem(dn);
         should(deploymentNode).be.an.Object();
 
-        const props = state.getProperties(dn);
-        (props).should.be.an.Object();
-        should(props['config']).be.an.Object();
+        {
+            const allProps = state.getAllProperties(dn);
+            (allProps).should.be.an.Object();
+            should(allProps['config']).be.an.Object();
+        }
+
+        {
+            const props = state.getProperties(dn, PropsId.config);
+            should(props).be.an.Object();
+            should(props.id).be.equal(PropsId.config);
+            should(props.kind).be.equal(PropsKind.yaml);
+        }
 
         const alerts = state.getAlerts(dn);
         should(alerts).be.an.Array;
