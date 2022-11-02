@@ -164,24 +164,6 @@ describe('registry-state', function() {
     });
 
 
-    it('debug-output-name-sanitize', function() {
-        const state = loadRegistryState('snapshot-items-small.json');
-
-        {
-            const dn = 'root/logic/ns-[kubevious]';
-            const sanitized = state.sanitizeDnPath(dn);
-            should(sanitized).be.equal('root/logic/ns-[kubevious]');
-        }
-        
-        {
-            const dn = 'root/logic/ns-[kubevious]/image-[kubevious/ui]';
-            const sanitized = state.sanitizeDnPath(dn);
-            should(sanitized).be.equal('root/logic/ns-[kubevious]/image-[kubevious_ui]');
-        }
-
-    });
-
-
 });
 
 function loadRegistryState(filePath: string) : RegistryState

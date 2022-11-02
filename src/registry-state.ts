@@ -1,9 +1,9 @@
 import _ from 'the-lodash';
 import { ILogger } from 'the-logger';
 
-import { parentDn, parseDn, PropsId } from '@kubevious/entity-meta';
-import { NodeKind } from '@kubevious/entity-meta';
+import { NodeKind, PropsId } from '@kubevious/entity-meta';
 import { EnumDictionary } from '@kubevious/entity-meta';
+import { parentDn, sanitizeDnPath } from '@kubevious/entity-meta';
 
 import { RegistryStateNode } from './registry-state-node';
 import { RegistryBundleState } from './registry-bundle-state';import { Alert } from './types/alert';
@@ -359,14 +359,14 @@ export class RegistryState implements RegistryAccessor
     {
         for(const dn of _.keys(this._nodeMap))
         {
-            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/node.json`;
+            const filePath = `${relPath}/${sanitizeDnPath(dn)}/node.json`;
             const node = this._nodeMap[dn];
             await logger.outputFile(filePath, node.config);
         }
 
         for(const dn of _.keys(this._childrenMap))
         {
-            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/children.json`;
+            const filePath = `${relPath}/${sanitizeDnPath(dn)}/children.json`;
             const children = this._childrenMap[dn];
             await logger.outputFile(filePath, children);
         }
@@ -378,14 +378,14 @@ export class RegistryState implements RegistryAccessor
             for(const propName of _.keys(propsMap))
             {
                 const props = propsMap[propName];
-                const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/props-${props.id}.json`;
+                const filePath = `${relPath}/${sanitizeDnPath(dn)}/props-${props.id}.json`;
                 await logger.outputFile(filePath, props);
             }
         }
 
         for(const dn of _.keys(this._alertsMap))
         {
-            const filePath = `${relPath}/${this.sanitizeDnPath(dn)}/alerts.json`;
+            const filePath = `${relPath}/${sanitizeDnPath(dn)}/alerts.json`;
             const alerts = this._alertsMap[dn];
             if (alerts.length > 0) {
                 await logger.outputFile(filePath, alerts);
@@ -393,25 +393,4 @@ export class RegistryState implements RegistryAccessor
         }
     }
 
-    sanitizeDnPath(dn: string): string
-    {
-        const parts = parseDn(dn);
-        const sanitizedParts = parts.map(x => this._sanitizeRn(x.rn));
-        return sanitizedParts.join('/');
-    }
-    
-    private _sanitizeRn(rn: string) : string
-    {
-        const SYMBOLS = [
-            /\//g , /\\/g, /#/g, /%/g, /&/g, /\*/g, /'/g, /"/g
-            , /{/g, /}/g, /</g, />'/g, /@/g
-            , /:/g, /\+/g, /\|/g, /=/g, /\?/g, /!/g];
-
-        for(const ch of SYMBOLS)
-        {
-            rn = rn.replace(ch, '_');
-        }
-
-        return rn;
-    }
 }
