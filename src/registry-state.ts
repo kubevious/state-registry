@@ -355,7 +355,7 @@ export class RegistryState implements RegistryAccessor
         return newBundleState;
     }
 
-    async debugOutputToDir(logger: ILogger, relPath: string) : Promise<void>
+    async debugOutputToDir(logger: ILogger, relPath: string)
     {
         for(const dn of _.keys(this._nodeMap))
         {
